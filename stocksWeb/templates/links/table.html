@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title>Table</title>
+</head>
+<style>
+	body {
+		background-color: #2B303A;
+        font-family: "Montserrat", sans-serif;
+	}
+	.icon {
+		text-decoration: none; 
+		color: white;
+	}
+	.title {
+		text-decoration: none;
+		color: #D64933;
+		font-weight: 800;
+	}
+</style>
+<body>
+    <div class="container mt-3">
+		<div class="row align-items-center">
+				<div class="col">
+					<a href="{% url 'home' %}" class="icon fa-solid fa-house fa-xl" style="padding-right: 1rem;"></a>
+					<a href="{% url 'graph' %}" class="icon fa-solid fa-chart-simple fa-xl"></a>
+				</div>
+				<div class="col">
+					<h1 class="d-inline"><a href="{% url 'home' %}" class="title">inv.ntry</a></h2>
+				</div>
+				<div class="col mt-3">
+					<form method="get">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Search" name="search" value="{{ search }}">
+							<button class="btn fa-solid fa-search" style="background-color: #D64933;" type="submit"></button>
+						</div>
+					</form>	
+				</div>
+				<div class="col-auto">
+					<a href="{% url 'create' %}" class="fa-solid fa-plus fa-xl" style="text-decoration: none; color: green;"></a>
+				</div>
+			{% if messages %}
+            	<div class="alert alert-success" role="alert">
+					{% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+		<form method="post">
+			{% csrf_token %}
+			<table class="table table-striped mt-5" style="background-color: white;">
+				<thead>
+					<tr style="background-color: #D64933;">
+						<th>
+							Brand
+							<a href="{% url 'table' %}?sort=brand_desc" class="icon fa-solid fa-caret-down"></a>
+							<a href="{% url 'table' %}?sort=brand_asc" class="icon fa-solid fa-caret-up"></a>
+						</th>
+						<th>
+							Type
+							<a href="{% url 'table' %}?sort=type_desc" class="icon fa-solid fa-caret-down"></a>
+							<a href="{% url 'table' %}?sort=type_asc" class="icon fa-solid fa-caret-up"></a>
+						</th>
+						<th>
+							Product Name
+							<a href="{% url 'table' %}?sort=productName_desc" class="icon fa-solid fa-caret-down"></a>
+							<a href="{% url 'table' %}?sort=productName_asc" class="icon fa-solid fa-caret-up"></a>
+						</th>
+						<th>
+							Description
+						</th>
+						<th>
+							Price
+							<a href="{% url 'table' %}?sort=price_desc" class="icon fa-solid fa-caret-down"></a>
+							<a href="{% url 'table' %}?sort=price_asc" class="icon fa-solid fa-caret-up"></a>
+						</th>
+						<th>
+							Quantity
+							<a href="{% url 'table' %}?sort=quantity_desc" class="icon fa-solid fa-caret-down"></a>
+							<a href="{% url 'table' %}?sort=quantity_asc" class="icon fa-solid fa-caret-up"></a>
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				  {% for i in data %}
+				  <tr>
+					<td>{{ i.brand }}</td>
+					<td>{{ i.type }}</td>
+					<td>{{ i.productName }}</td>
+					<td style="font-size: 12px;">{{ i.desc }}</td>
+					<td>{{ i.price }}</td>
+					<td>{{ i.quantity }}</td>
+					<td style="text-align: center;">
+						<a href="{% url 'edit' i.id %}" class="fa-solid fa-pen p-3" style="text-decoration: none; color: rgb(0, 162, 0);" name="update"></a>
+						<a href="{% url 'delete' i.id %}" class="fa-solid fa-trash" style="text-decoration: none; color: rgb(193, 0, 0);" name="delete"></a>
+					</td>
+				  </tr>
+				  {% endfor %}
+				</tbody>
+			  </table>
+		</form>
+		<div class="pagination col justify-content-end">
+			<span class="step-links">
+				{% if data.has_previous %}
+					<a href="?page={{ data.previous_page_number }}" class="icon fa-solid fa-angle-left title"></a>
+					<a href="?page=1" class="icon fa-solid fa-angles-left title"></a>
+				{% endif %}
+				<span class="current title">
+					Page: {{ data.number }} / {{ data.paginator.num_pages }}
+				</span>
+				{% if data.has_next %}
+					<a href="?page={{ data.paginator.num_pages }}" class="icon fa-solid fa-angles-right title"></a>
+					<a href="?page={{ data.next_page_number }}" class="icon fa-solid fa-angle-right title"></a>
+				{% endif %}
+			</span>
+		</div>
+    </div>
+</body>
+</html>
