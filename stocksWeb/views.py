@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import Inventory
 from django.contrib import messages
 from django.db.models import Q, Sum
-from django.db import IntegrityError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
@@ -48,7 +47,6 @@ def table(request):
     }
     return render(request, 'links/table.html', context)
 
-
 def create(request):
     data = Inventory.objects.all()
     context = {
@@ -70,22 +68,26 @@ def create(request):
             messages.error(request, 'Must fill up all fields')
             return render(request, 'links/create.html', context)
         
-        try:
-            Inventory.objects.create(brand=brand, type=type, productName=productName, desc=desc, price=price, quantity=quantity)
-            messages.success(request, productName+' created successfully')
-            return redirect('create')
-        except IntegrityError:
-            messages.error(request, 'Product must be unique')
+        if Inventory.objects.filter(productName__iexact=productName).exists():
+            messages.error(request, 'Product name must be unique (case-insensitive)')
             return render(request, 'links/create.html', context)
-    
+        
+        Inventory.objects.create(
+            brand=brand, type=type, productName=productName,
+            desc=desc, price=price, quantity=quantity
+        )
+        messages.success(request, productName + ' created successfully')
+        return redirect('create')
+
 def edit(request, id):
-    data = Inventory.objects.get(pk=id)
+    data = get_object_or_404(Inventory, pk=id)
     context = {
         'data': data,
-        'content': data,
     }
+    
     if request.method == 'GET':
         return render(request, 'links/edit.html', context)
+
     if request.method == 'POST':
         brand = request.POST.get('brand')
         type = request.POST.get('type')
@@ -98,24 +100,20 @@ def edit(request, id):
             messages.error(request, 'Must fill up all fields')
             return render(request, 'links/edit.html', context)
         
+        if Inventory.objects.filter(productName__iexact=productName).exclude(pk=id).exists():
+            messages.error(request, 'Product name must be unique (case-insensitive)')
+            return render(request, 'links/edit.html', context)
+
         data.brand = brand
         data.type = type
         data.productName = productName
         data.desc = desc
         data.price = price
         data.quantity = quantity
+        data.save()
 
-        try:
-            data.save()
-            messages.success(request, 'Data updated successfully')
-            return redirect('edit', id)
-        except IntegrityError:
-            messages.error(request, 'An error occurred while saving data')
-            return render(request, 'links/edit.html', context)
-
-    return render(request, 'links/table.html', {'data': data})
-
-
+        messages.success(request, 'Data updated successfully')
+        return redirect('edit', id=id)
 
 def delete(request, id):
     data = Inventory.objects.get(pk=id)

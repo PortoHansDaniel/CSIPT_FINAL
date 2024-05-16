@@ -18,7 +18,7 @@
                     <div class="card">
                         <div class="card-body">
 							{% if messages %}
-                                <div class="alert alert-success" role="alert">
+                                <div class="alert alert-light" role="alert">
                                     {% for message in messages %}
                                         {{ message }}
                                     {% endfor %}
@@ -26,27 +26,27 @@
                             {% endif %}
                             <div class="form-group mb-3">
                                 <label for="brand">Brand</label>
-                                <input type="text" class="form-control" id="brand" name="brand" value="{{content.brand}}">
+                                <input type="text" class="form-control" id="brand" name="brand" value="{{data.brand}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="type">Type</label>
-                                <input type="text" class="form-control" id="type" name="type" value="{{content.type}}">
+                                <input type="text" class="form-control" id="type" name="type" value="{{data.type}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="productName">Product Name</label>
-                                <input type="text" class="form-control" id="productName" name="productName" rows="3" value="{{content.productName}}">
+                                <input type="text" class="form-control" id="productName" name="productName" rows="3" value="{{data.productName}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="desc">Description</label>
-                                <textarea type="text" class="form-control" style="height: 150px;" rows="3" id="desc" name="desc">{{content.desc}}</textarea>
+                                <textarea type="text" class="form-control" style="height: 150px;" rows="3" id="desc" name="desc">{{data.desc}}</textarea>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="price">Price</label>
-                                <input type="number" class="form-control" id="price" name="price" value="{{content.price}}">
+                                <input type="number" class="form-control" id="price" name="price" value="{{data.price}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" value="{{content.quantity}}">
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="{{data.quantity}}">
                             </div>
                             <input type="submit" value="Save" class="btn" style="background-color: #D64933; color: white;">
 							<a href="{% url 'table' %}" type="button" class="btn" style="background-color: #D64933; color: white;">Go back to Table</a>
