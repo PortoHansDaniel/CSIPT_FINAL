@@ -8,16 +8,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <title>Create</title>
+    <style>
+        body {
+            background-color: #2B303A;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control {
+            background-color: #fff;
+        }
+        .btn-custom {
+            background-color: #D64933;
+            color: white;
+        }
+        .alert-light {
+            color: #2B303A;
+            background-color: #fefefe;
+            border-color: #fdfdfe;
+        }
+    </style>
 </head>
-<body style="background-color: #2B303A; font-family: 'Montserrat', sans-serif;">
+<body>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <form action="{% url 'create' %}" method="post">
-					{% csrf_token %}
+                    {% csrf_token %}
                     <div class="card">
                         <div class="card-body">
-							{% if messages %}
+                            {% if messages %}
                                 <div class="alert alert-light" role="alert">
                                     {% for message in messages %}
                                         {{ message }}
@@ -25,31 +46,31 @@
                                 </div>
                             {% endif %}
                             <div class="form-group mb-3">
-                                <label for="brand" style="font-weight: bold;">Brand</label>
-                                <input type="text" class="form-control" id="brand" name="brand" value="{{content.brand}}">
+                                <label for="brand">Brand</label>
+                                <input type="text" class="form-control" id="brand" name="brand" value="{{ content.brand }}">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="type" style="font-weight: bold;">Type</label>
-                                <input type="text" class="form-control" id="type" name="type" value="{{content.type}}">
+                                <label for="type">Type</label>
+                                <input type="text" class="form-control" id="type" name="type" value="{{ content.type }}">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="productName" style="font-weight: bold;">Product Name</label>
-                                <input type="text" class="form-control" id="productName" name="productName" value="{{content.productName}}">
+                                <label for="productName">Product Name</label>
+                                <input type="text" class="form-control" id="productName" name="productName" value="{{ content.productName }}">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="desc" style="font-weight: bold;">Description</label>
-                                <textarea type="text" class="form-control" style="height: 150px;" rows="3" id="desc" name="desc">{{content.desc}}</textarea>
+                                <label for="desc">Description</label>
+                                <textarea class="form-control" id="desc" name="desc" rows="3" style="height: 150px;">{{ content.desc }}</textarea>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="price" style="font-weight: bold;">Price</label>
-                                <input type="number" class="form-control" id="price" name="price" value="{{content.price}}">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" id="price" name="price" value="{{ content.price }}">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="quantity" style="font-weight: bold;">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" value="{{content.quantity}}">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="{{ content.quantity }}">
                             </div>
-                            <input type="submit" value="Add" class="btn" style="background-color: #D64933; color: white;">
-							<a href="{% url 'table' %}" type="button" class="btn" style="background-color: #D64933; color: white;">Go back to Table</a>
+                            <input type="submit" value="Add" class="btn btn-custom">
+                            <a href="{% url 'table' %}" class="btn btn-custom">Go back to Table</a>
                         </div>
                     </div>
                 </form>
